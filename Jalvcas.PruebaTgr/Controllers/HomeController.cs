@@ -1,4 +1,5 @@
-﻿using Jalvcas.PruebaTgr.Models;
+﻿using Google.Apis.Auth.AspNetCore3;
+using Jalvcas.PruebaTgr.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,7 @@ namespace Jalvcas.PruebaTgr.Controllers
             return RedirectToAction("Landing", new { idToken });
         }
 
+        [GoogleScopedAuthorize("https://www.googleapis.com/auth/userinfo.email","https://www.googleapis.com/auth/userinfo.profile")]
         public IActionResult Landing(string idToken)
         {
             if (idToken == null) return Error();
@@ -49,12 +51,6 @@ namespace Jalvcas.PruebaTgr.Controllers
             ViewData["Email"] = decodedToken.Claims.First(claim => claim.Type == "email").Value;
 
             return View();
-        }
-
-        [HttpPost]
-        public IActionResult Ticket()
-        {
-            return new JsonResult(Guid.NewGuid());
         }
 
 
